@@ -9,6 +9,14 @@ class Task:
     def __str__(self):
         status = "Done" if self.completed else "Not Done"
         return f"{status} - {self.task_name}"
+    def edit(self, task_name=None, priority=None, deadline=None):
+        if task_name is not None:
+            self.task_name = task_name
+        if priority is not None:
+            self.priority = priority
+        if deadline is not None:
+            self.deadline = deadline
+
 class TaskManager:
     def __init__(self):
         self.tasks = []
@@ -28,32 +36,62 @@ class TaskManager:
             del self.tasks[task_index]
         else:
             print("Invalid task index.")
-manager=TaskManager()
-def main():
-        while True:
-            print("\nTask Manager")
-            print("1. Add Task")
-            print("2. View Tasks")
-            print("3. Mark Task as Done")
-            print("4. Delete Task")
-            print("5. Exit")
+    def edit_task(self, task_index):
+        if 0 <= task_index < len(self.tasks):
+            print("\nEdit Task Menu")
+            print("1. Edit Task Name")
+            print("2. Edit Priority")
+            print("3. Edit Deadline")
+            print("4. Back")
+            
             choice = input("Enter your choice: ")
             if choice == '1':
-                task_name = input("Enter task name: ")
-                priority = input("Enter task priority: ")
-                deadline = input("Enter task deadline: ")
-                manager.add_task(task_name,priority,deadline)
+                new_name = input("Enter new task name: ")
+                self.tasks[task_index].edit(task_name=new_name)
             elif choice == '2':
-                manager.view_tasks()
+                new_priority = input("Enter new priority: ")
+                self.tasks[task_index].edit(priority=new_priority)
             elif choice == '3':
-                task_index = int(input("Enter task index to mark as done: ")) - 1
-                manager.mark_task_done(task_index)
+                new_deadline = input("Enter new deadline: ")
+                self.tasks[task_index].edit(deadline=new_deadline)
             elif choice == '4':
-                task_index = int(input("Enter task index to delete: ")) - 1
-                manager.delete_task(task_index)
-            elif choice == '5':
-                break
+                return
             else:
                 print("Invalid choice.")
+        else:
+            print("Invalid task index.")
+
+manager=TaskManager()
+def main():
+    while True:
+        print("\nTask Manager")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Mark Task as Done")
+        print("4. Delete Task")
+        print("5. Edit Task")
+        print("6. Exit")
+        
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            task_name = input("Enter task name: ")
+            priority = input("Enter task priority: ")
+            deadline = input("Enter task deadline: ")
+            manager.add_task(task_name,priority,deadline)
+        elif choice == '2':
+            manager.view_tasks()
+        elif choice == '3':
+            task_index = int(input("Enter task index to mark as done: ")) - 1
+            manager.mark_task_done(task_index)
+        elif choice == '4':
+            task_index = int(input("Enter task index to delete: ")) - 1
+            manager.delete_task(task_index)
+        elif choice == '5':
+            task_index = int(input("Enter task index to edit: ")) - 1
+            manager.edit_task(task_index)
+        elif choice == '6':
+            break
+        else:
+            print("Invalid choice.")
 if __name__ == "__main__":
         main()
