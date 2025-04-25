@@ -62,6 +62,18 @@ class TaskManager:
             print("Invalid task index.")
 
 manager=TaskManager()
+
+def get_valid_index(prompt):
+    while True:
+        try:
+            index = int(input(prompt)) - 1
+            if index < 0:
+                print("Please enter a positive number.")
+                continue
+            return index
+        except ValueError:
+            print("Please enter a valid number.")
+
 def main():
     while True:
         print("\nTask Manager")
@@ -73,25 +85,62 @@ def main():
         print("6. Exit")
         
         choice = input("Enter your choice: ")
-        if choice == '1':
-            task_name = input("Enter task name: ")
-            priority = input("Enter task priority: ")
-            deadline = input("Enter task deadline: ")
-            manager.add_task(task_name,priority,deadline)
-        elif choice == '2':
-            manager.view_tasks()
-        elif choice == '3':
-            task_index = int(input("Enter task index to mark as done: ")) - 1
-            manager.mark_task_done(task_index)
-        elif choice == '4':
-            task_index = int(input("Enter task index to delete: ")) - 1
-            manager.delete_task(task_index)
-        elif choice == '5':
-            task_index = int(input("Enter task index to edit: ")) - 1
-            manager.edit_task(task_index)
-        elif choice == '6':
-            break
-        else:
-            print("Invalid choice.")
+        try:
+            if choice == '1':
+                task_name = input("Enter task name: ").strip()
+                if not task_name:
+                    print("Task name cannot be empty.")
+                    continue
+                    
+                priority = input("Enter task priority (High/Medium/Low): ").strip().capitalize()
+                if priority not in ['High', 'Medium', 'Low']:
+                    print("Invalid priority. Please enter High, Medium, or Low.")
+                    continue
+                    
+                deadline = input("Enter task deadline (YYYY-MM-DD): ").strip()
+                # You could add date validation here if needed
+                
+                manager.add_task(task_name, priority, deadline)
+                
+            elif choice == '2':
+                if not manager.tasks:
+                    print("No tasks available.")
+                else:
+                    manager.view_tasks()
+                    
+            elif choice == '3':
+                if not manager.tasks:
+                    print("No tasks available.")
+                else:
+                    manager.view_tasks()
+                    task_index = get_valid_index("Enter task index to mark as done: ")
+                    manager.mark_task_done(task_index)
+                    
+            elif choice == '4':
+                if not manager.tasks:
+                    print("No tasks available.")
+                else:
+                    manager.view_tasks()
+                    task_index = get_valid_index("Enter task index to delete: ")
+                    manager.delete_task(task_index)
+                    
+            elif choice == '5':
+                if not manager.tasks:
+                    print("No tasks available.")
+                else:
+                    manager.view_tasks()
+                    task_index = get_valid_index("Enter task index to edit: ")
+                    manager.edit_task(task_index)
+                    
+            elif choice == '6':
+                print("Goodbye!")
+                break
+                
+            else:
+                print("Invalid choice. Please enter a number between 1 and 6.")
+                
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            
 if __name__ == "__main__":
-        main()
+    main()
